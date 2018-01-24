@@ -27,7 +27,7 @@ int main()
 
         cout << "1. Generate a new magic number\n";
         cout << "2. Play\n";
-        cout << "3. Set number of attempts (default = 10)\n"
+        cout << "3. Set number of attempts (default = 10)\n";
         cout << "4. Quit\n";
 
         do{
@@ -77,11 +77,11 @@ void play (int m, int attempts){
          
         if(x==m || x==999){ 
             
-            cout << "\n"+string(100,'.');
-            cout << "\n"+string(100,'.');
-            cout << "\n"+string(42,'.')+"That is correct!"+string(42,'.');
-            cout << "\n"+string(100,'.');
-            cout << "\n"+string(100,'.')+"\n";
+            cout << "\n"+string(100,'x');
+            cout << "\n"+string(100,'x');
+            cout << "\n"+string(41,'+')+" That is CORRECT! "+string(41,'+');
+            cout << "\n"+string(100,'x');
+            cout << "\n"+string(100,'x')+"\n";
 
             return; // if correct, exit function
             
