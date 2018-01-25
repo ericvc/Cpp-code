@@ -1,7 +1,6 @@
 //Unnecessarily complicated "guess the magic number" program written for C++. Because learning is fun.
 
 #include <iostream>
-#include <numeric> // 'iota'
 #include <cstdlib>
 #include <time.h> // 'time'
 
@@ -27,7 +26,7 @@ int main()
 
         cout << "1. Generate a new magic number\n";
         cout << "2. Play\n";
-        cout << "3. Set number of attempts (default = 10)\n";
+        cout << "3. Set number of attempts (current = " << attempts << ")\n";
         cout << "4. Quit\n\n";
         cout << " Press '5' to test AutoSolv \n\n";
 
@@ -35,11 +34,17 @@ int main()
      
             cout << "Enter your choice: ";
             cin >> option;
+            while(cin.fail()) {
+                  cout << "\nError, try again: ";
+                  cin.clear();
+                  cin.ignore(256,'\n');
+                  cin >> option;
+    };
         
         } while(option<1 || option >5); // if 'option' not set, ask for user selection
      
         switch(option){
-        
+            
             case 1:
                 magic = rand() % 100 + 1; // range(1-100)
                 break;
@@ -47,7 +52,7 @@ int main()
                 play(magic, attempts);
                 break;
             case 3:
-                cout << "Set the number of attempts: ";
+                cout << "\nSet the number of attempts: ";
                 cin >> attempts;
                 break;
             case 4:
@@ -55,6 +60,7 @@ int main()
                 break;
             case 5:
                 autosolv(magic, attempts);
+                magic = rand() % 100 + 1; // range(1-100)
                 break;
         
         }
@@ -109,6 +115,7 @@ void play (int m, int attempts){
 
 }
 
+
 // create simple algorithm to solve the magic number problem.
 void autosolv(int m, int attempts){
     
@@ -119,16 +126,14 @@ void autosolv(int m, int attempts){
     for(t=0; t<=(attempts-1); t++){
 
        int x = glo_min + (rand() % (int)(glo_max - glo_min + 1));
-        
-        if(t<attempts){
-        
-            if(x==m){ 
-                
-                cout << " AutoSolv correctly guessed " << m << " in " << t+1 << " attempts.\n\n";
+         
+        if(x==m){ 
+               
+            cout << "\n\n *****AutoSolv correctly guessed " << m << " in " << t+1 << " attempts*****\n\n";
 
-                return; // if correct, exit function
+            return; // if correct, exit function
                 
-            }
+         }
             
             /* algorithm for iteratively searching for the magic number
             1. record attempts
@@ -137,26 +142,13 @@ void autosolv(int m, int attempts){
             (Let's call this the "Guess Who" procedure)
             */
              
-            if(x<m) glo_min = x; // update function variable
+         if(x<m) glo_min = x; // update function variable
                 
                 else glo_max = x; // update function variable
-        }
-            
-            else{
-
-                if(x==m){ 
                         
-                        cout << " AutoSolv correctly guessed " << m << " in " << t << " attempts.\n\n";
+    }     
 
-                        return; // if correct, exit function
-                        
-                }
-
-            }
-    
-    }
-
-    cout << "\n\n^^^^^^AutoSolv failed to correctly guess the magic number^^^^^^\n\n";
+    cout << "\n\n^^^^^^AutoSolv failed to correctly guess the magic number in " << attempts << " attempts^^^^^^\n\n";
     cout << "Select a new option: \n\n";
 
 }
