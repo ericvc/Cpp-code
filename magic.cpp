@@ -6,8 +6,10 @@
 
 using namespace std;
 
+// function prototypes
 void play(int m, int attempts);
-void autosolv(int m, int attempts, int init);
+void autosolv(int m, int *a, int *i);
+void submenu(int *a, int *i); // accepts integer pointers
 
 int main()
 {
@@ -27,10 +29,9 @@ int main()
 
         cout << "1. Generate a new magic number\n";
         cout << "2. Play\n";
-        cout << "3. Set number of attempts [current = " << attempts << "]\n";
+        cout << "3. Options\n";
         cout << "4. Quit\n";
-        cout << "5. Test the AutoSolv function \n";
-        cout << "6. Set initial value for AutoSolv [current = " << init << "] (select 0  for random value)\n\n\n";
+        cout << "5. Test the AutoSolv function \n\n";
 
         do{
      
@@ -41,9 +42,9 @@ int main()
                   cin.clear();
                   cin.ignore(256,'\n');
                   cin >> option;
-    };
+                };
         
-        } while(option<1 || option >6); // if 'option' not set, ask for user selection
+        } while(option<1 || option >5); // if 'option' not set, ask for user selection
      
         switch(option){
             
@@ -54,14 +55,11 @@ int main()
                 play(magic, attempts);
                 break;
             case 3:
-                cout << "\nSet the number of attempts: ";
-                cin >> attempts;
-                while(cin.fail()) {
-                    cout << "\nError, try again: ";
-                    cin.clear();
-                    cin.ignore(256,'\n');
-                    cin >> attempts;
-                };
+                int *a; // declare pointers assign memory address
+                int *b;
+                a = &attempts;
+                b = &init;
+                submenu(a, b); // execute submenu function
                 break;
             case 4:
                 cout << "\n"+string(10,' ')+"Take'er easy!"+string(10,' ')+"\n\n";
@@ -69,16 +67,6 @@ int main()
             case 5:
                 autosolv(magic, attempts, init);
                 magic = rand() % 100 + 1; // range(1-100)
-                break;
-            case 6:
-                cout << "\nSet the initial value: ";
-                cin >> init;
-                while(cin.fail()) {
-                    cout << "\nError, try again: ";
-                    cin.clear();
-                    cin.ignore(256,'\n');
-                    cin >> attempts;
-                };
                 break;
         }
         
@@ -144,7 +132,7 @@ void autosolv(int m, int attempts, int init){
 
     for(t=0; t<=(attempts-1); t++){
 
-       int x = glo_min + (rand() % (int)(glo_max - glo_min + 1));
+        if(t>0) x = glo_min + (rand() % (int)(glo_max - glo_min + 1));
          
         if(x==m){ 
                
@@ -163,7 +151,7 @@ void autosolv(int m, int attempts, int init){
              
          if(x<m) glo_min = x; // update function variable
                 
-                else glo_max = x; // update function variable
+            else glo_max = x; // update function variable
                         
     }     
 
@@ -171,3 +159,62 @@ void autosolv(int m, int attempts, int init){
     cout << "Select a new option: \n\n";
 
 }
+
+// function for sub-option menu
+void submenu(int *a, int *i){
+    
+    int sub_option; // menu suboption (local variable)
+    
+    cout << "\n\n"+string(80,'.')+"\n";
+    cout << "              Program Settings: Make selection to change options.          ";
+    cout << "\n"+string(80,'.')+"\n\n";
+    
+    do{
+        
+        cout << "1. Set number of attempts [current = " << *a << "]\n";
+        cout << "2. Set initial value for AutoSolv [current = " << *i << "] (select 0  for random value)\n";
+        cout << "3. Return to main menu\n\n";
+        
+        do{
+            
+            cout << "Enter your choice: ";
+            cin >> sub_option;
+            while(cin.fail()) {
+                cout << "\nError, try again: ";
+                cin.clear();
+                cin.ignore(256,'\n');
+                cin >> sub_option;
+            };
+            
+        } while(sub_option<1 || sub_option >3); // if 'option' not set, ask for user selection
+        
+        switch(sub_option){
+                
+            case 1:
+                cout << "\nNumber of attempts: ";
+                cin >> *a;
+                while(cin.fail()) {
+                    cout << "\nError, try again: ";
+                    cin.clear();
+                    cin.ignore(256,'\n');
+                    cin >> *a;
+                };
+                break;
+            case 2:
+                cout << "\nStarting value: ";
+                cin >> *i;
+                while(cin.fail()) {
+                    cout << "\nError, try again: ";
+                    cin.clear();
+                    cin.ignore(256,'\n');
+                    cin >> *i;
+                };
+                break;
+            case 3:
+                break;
+        }
+        
+    } while(sub_option != 3);
+
+}
+
