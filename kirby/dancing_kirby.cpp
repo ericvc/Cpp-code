@@ -6,16 +6,19 @@
 
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, int randomize)
 {
 
+if(!argc) argc = 1;
+
+//randomize kirbies dance moves
 int i;
-for(i=1;i<=argc;i++){
+for(i=0;i<argc;i++){
    
-    char token[80]; // arry for charcter string and tokens
+    char token[80]; // array for character string and tokens
     char *k, *t;
 
-    char kirb[] = "<(**<) (>**)> <(**<) (>**)> (^-^) <(**)> (>''<) <(**)> t(**t) (w**w) ";
+    char kirb[] = "<(**<) (>**)> <(**<) (>**)> (^**^) <(**)> (>**<) <(**)> t(**t) (w**w)";
     k = kirb;
 
     while(*k){
@@ -31,15 +34,17 @@ for(i=1;i<=argc;i++){
         
         if(*k) *k++;
         *t = '\0';
-        cout << "\t" << token << "\r";
-
+        cout << "\t\t" << token << "\r";
+        
         using namespace std::this_thread; // sleep_for, sleep_until
         using namespace std::chrono; // nanoseconds, system_clock, seconds
         sleep_for(nanoseconds(10));
         sleep_until(system_clock::now() + seconds(1));
+    
     }
 
-}
+  }
+  
   return 0;
 
 }

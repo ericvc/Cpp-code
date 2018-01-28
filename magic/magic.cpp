@@ -8,8 +8,8 @@ using namespace std;
 
 // function prototypes
 void play(int m, int attempts);
-void autosolv(int m, int *a, int *i);
-void submenu(int *a, int *i); // accepts integer pointers
+void autosolv(int m, int a, int i);
+void submenu(int *attempts, int *init); // accepts integer pointers
 
 int main()
 {
@@ -23,15 +23,16 @@ int main()
     
     cout << "\n\n"+string(80,'*')+"\n";
     cout << "     Needlessly complicated \"guess the magic number\" program written for C++    \n";
-    cout << "\n"+string(80,'*')+"\n\n";
+    cout << "\n"+string(80,'*')+"\n";
 
     do{
 
-        cout << "1. Generate a new magic number\n";
-        cout << "2. Play\n";
-        cout << "3. Options\n";
-        cout << "4. Quit\n";
-        cout << "5. Test the AutoSolv function \n\n";
+        cout << "\n"+string(80,'=')+"\n";
+        cout << "   1. Generate a new magic number\n";
+        cout << "   2. Play\n";
+        cout << "   3. Options\n";
+        cout << "   4. Quit\n";
+        cout << "   5. Test the AutoSolv function \n\n";
 
         do{
      
@@ -155,8 +156,7 @@ void autosolv(int m, int attempts, int init){
                         
     }     
 
-    cout << "\n\n^^^^^^AutoSolv failed to correctly guess the magic number in " << attempts << " attempts^^^^^^\n\n";
-    cout << "Select a new option: \n\n";
+    cout << "\n\n*****AutoSolv failed to correctly guess the magic number in " << attempts << " attempts*****\n\n";
 
 }
 
@@ -165,8 +165,8 @@ void submenu(int *a, int *i){
     
     int sub_option; // menu suboption (local variable)
     
-    cout << "\n\n"+string(80,'.')+"\n";
-    cout << "              Program Settings: Make selection to change options.          ";
+    cout << "\n\n"+string(80,'=')+"\n";
+    cout << "                               Program Settings                     \n";
     cout << "\n"+string(80,'.')+"\n\n";
     
     do{
@@ -218,3 +218,8 @@ void submenu(int *a, int *i){
 
 }
 
+/* Other ideas for program:
+    i. graphic input: "slider to select the number of attempts (5-20)" (kbiput)?
+    ii. read and print text file
+
+*/
