@@ -3,39 +3,50 @@
 #R has poor memory management, which can cause issues with computational performance.
 #GIS applications typically involve operations on large matrices of data, which tend
 #to be limited by system memory.
-setwd("/Volumes/Data/GitHub/Cpp-code/walker/")
-#compiles functions for R workspace
-sourceCpp("walker_functions.cpp")
+setwd("Documents/GitHub/Cpp-code/walker/")
 
 library(adehabitatHR)
 library(Rcpp)
 library(microbenchmark)
 
+#compiles functions for R workspace
+sourceCpp("walker_functions.cpp")
+#reads in R analagrous R functions
+source("r_functions.R")
+
 #simlulate movement path using a correlated random walk
-nlocs = 1000
+nlocs = 1e4
 walk = simm.crw(1:nlocs, r = 0.1, h=5)
 crds = walk[[1]][,c("x","y")]
 
-#calculate displacements along each axis coordinate
+#calculate displacements along each axis
 dx = crds$x[-1] - crds$x[-nlocs]
 dy = crds$y[-1] - crds$y[-nlocs]
 
-#Cpp functions
-s = step_length(dx, dy)
-tu = turn_angle(dx, dy)
+#compare performance of R and C++ functions
+microbenchmark(step_length(dx,dy),
+               step_lengthR(dx,dy),
+               turn_angle(dx,dy),
+               turn_angleR(dx,dy))
 
-#analagous R functions
-step_lengthR = function(xx, yy){
-  
-  sqrt(xx^2 + yy^2)
-}
-step_lengthR(dx,dy)
-
-#compare performance
-microbenchmark(step_length(dx,dy), 
-               step_lengthR(dx,dy)
-               )
 # Unit: microseconds
-# expr                    min      lq     mean median     uq    max neval
-# step_length(dx, dy)  20.544 21.4165 23.25683 21.991 22.372 74.057 100
-# step_lengthR(dx, dy) 27.118 27.8335 28.28806 28.088 28.546 39.028 100
+#                 expr     min       lq      mean  median      uq      max neval
+#
+#  step_length(dx, dy)  26.738  27.8760  63.26713  28.445  29.015 3425.284   100
+# step_lengthR(dx, dy)  71.112  72.8180 108.81811  73.388  74.526 3483.310   100
+#
+#   turn_angle(dx, dy) 307.770 319.7170 359.47062 321.424 329.957 3736.466   100
+#  turn_angleR(dx, dy) 618.953 637.4415 822.64909 642.277 664.180 4140.947   100
+
+#Functions written for C++ perform much faster than analagous R functions. The difference is particularly
+#large for the "turn angle" function. This is to be expected because the R function uses a lot of
+#indexing, which exposes some of the slowness in R. The increase in performance also scales with the
+#amount of data being processed. C++ functions outperform R counterparts especially well with large amounts of data.
+
+#---Walker virtual environment
+preyDens = 100
+#simulate Poisson distribution of resources
+x = runif(preyDens)
+y = runif(preyDens)
+
+plot(x,y)

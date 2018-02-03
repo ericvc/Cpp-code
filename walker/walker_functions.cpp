@@ -2,6 +2,7 @@
 
 // classes example
 #include <Rcpp.h>
+#include <cmath>
 using namespace Rcpp;
 
 // This is a simple example of exporting a C++ function to R. You can
@@ -17,17 +18,16 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector step_length(NumericVector xx, NumericVector yy){
   
-  const double pi =  3.14159;
-  register int n = xx.size(); //get array dimension
   register int t;
-  NumericVector out(n); // vector to return to R environment
+  register int n = xx.size(); //get array dimension
+  register NumericVector out(n); // vector to return to R environment
   
-  for(t=0; t<n; t++){
+  for(t=0;t<n;t++){
     
-   out[t] = pow(pow(xx[t],2)+pow(yy[t],2),0.5);
-      
+    out[t] = sqrt( std::pow(xx[t],2) + std::pow(yy[t],2) );
+    
   }
-    
+
   return out;
   
 }
@@ -35,34 +35,32 @@ NumericVector step_length(NumericVector xx, NumericVector yy){
 // [[Rcpp::export]]
 NumericVector turn_angle(NumericVector xx, NumericVector yy){
 
-  const double pi =  3.14159;
+  double pi =  3.14159;
   register int n = xx.size(); //get array dimension
   register int t;
-  NumericVector turns1(n);
-  NumericVector turns2(n-1); // vector to return to R environment
-  
+  register NumericVector turns1(n);
+  register NumericVector turns2(n-1); // vector to return to R environment
+
   for(t=0; t<n; t++){
+
+    turns1[t] = atan(xx[t]/yy[t]);
     
     if(yy[t]<0){
       
-      if(xx[t]<0) turns1[t] = -pi + atan(xx[t]/yy[t]);
+      if(xx[t]<0) turns1[t] -= pi;
       
-      else turns1[t] = pi + atan(xx[t]/yy[t]);
+        else turns1[t] += pi;
       
     }
-    
-    else turns1[t] = atan(xx[t]/yy[t]);
 
     if(t>0){
       
-      double eval = (turns1[t] - turns1[t-1]);
+      turns2[t-1] = (turns1[t] - turns1[t-1]);
       
-      if(eval < -pi){turns2[t-1] = eval + 2*pi;}
-        
-      if(eval > pi) {turns2[t-1] = eval - 2*pi;}
-        
-        else {turns2[t-1] = eval;}
-        
+      if(turns2[t-1] > pi){turns2[t-1] -= 2*pi;}
+      
+      if(turns2[t-1] < -1*pi){turns2[t-1] += 2*pi;}
+           
     }
   
   }
